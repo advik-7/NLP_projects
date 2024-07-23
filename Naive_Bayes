@@ -1,0 +1,40 @@
+import numpy as np 
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+# Reviews and corresponding sentiments
+reviews = ["i did like the product",
+           "i didn't like the product",
+           "the product is too expensive so i didn't like it",
+           "product is good so i like it",
+           "product is bad so i didn't like it"]
+
+sentiments = np.array([1, 0, 0, 1, 0])
+
+# Initialize CountVectorizer
+CV = CountVectorizer()
+
+# Tokenize reviews
+tokenized_review = CV.fit_transform(reviews)
+
+# Train the Naive Bayes model
+model = MultinomialNB()
+model.fit(tokenized_review, sentiments)
+
+# Define function for sentiment prediction
+def predict_sentiment(review):
+    # Tokenize the user review
+    tokenized_review = CV.transform([review])
+    # Predict sentiment
+    prediction = model.predict(tokenized_review)
+    if prediction[0] == 1:
+        return "positive"
+    else:
+        return "negative"
+
+# Get user review
+user_review = input("Enter your review: ")
+
+# Predict sentiment for user review
+print("Predicted sentiment:", predict_sentiment(user_review))
+#code mostly correct
